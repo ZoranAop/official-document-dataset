@@ -7,15 +7,22 @@
 import json
 import hashlib
 import logging
+import sys
+import os
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Any
-from clean_html import clean_html
-from normalize_text import normalize_text
-from extract_metadata import MetadataExtractor
-from structure_analyzer import StructureAnalyzer
-from topic_extractor import TopicExtractor
-from keyword_extractor import KeywordExtractor
+
+# 添加项目根目录到Python路径
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from scripts.parser.clean_html import clean_html
+from scripts.parser.normalize_text import normalize_text
+from scripts.parser.extract_metadata import MetadataExtractor
+from scripts.analyzer.structure_analyzer import StructureAnalyzer
+from scripts.analyzer.topic_extractor import TopicExtractor
+from scripts.analyzer.keyword_extractor import KeywordExtractor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -124,11 +131,9 @@ class DatasetBuilder:
     def save_dataset(self, documents: List[Dict], filename: str = 'documents.jsonl'):
         """保存数据集为JSONL格式"""
         output_path = self.output_dir / filename
-        
         with open(output_path, 'w', encoding='utf-8') as f:
             for doc in documents:
                 f.write(json.dumps(doc, ensure_ascii=False) + '\n')
-        
         logger.info(f"Saved {len(documents)} documents to {output_path}")
         return output_path
     
@@ -139,7 +144,7 @@ class DatasetBuilder:
             'by_category': {},
             'by_type': {},
             'by_domain': {},
-            'by_date': {},
+            'by_year': {},
             'avg_content_length': 0,
             'avg_keywords_count': 0,
             'avg_themes_count': 0,
@@ -182,7 +187,7 @@ class DatasetBuilder:
         stats['by_category'] = category_counts
         stats['by_type'] = type_counts
         stats['by_domain'] = domain_counts
-        stats['by_date'] = date_counts
+        stats['by_year'] = date_counts
         stats['avg_content_length'] = total_content_length // len(documents)
         stats['avg_keywords_count'] = total_keywords // len(documents)
         stats['avg_themes_count'] = total_themes // len(documents)
@@ -193,17 +198,25 @@ class DatasetBuilder:
         """运行完整处理流程"""
         # 加载原始数据
         logger.info(f"Loading raw data from {raw_file}")
-        with open(raw_file, 'r', encoding='utf-8') as f:
-            raw_data = json.load(f)
-            raw_documents = raw_data.get('documents', [])
+        
+        # 支持JSON和JSONL格式
+        if raw_file.suffix == '.jsonl':
+            with open(raw_file, 'r', encoding='utf-8') as f:
+                raw_documents = [json.loads(line) for line in f]
+        else:
+            with open(raw_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                raw_documents = data.get('articles', data.get('documents', []))
         
         logger.info(f"Loaded {len(raw_documents)} raw documents")
         
         # 构建数据集
         processed_documents = self.build_dataset(raw_documents)
         
-        # 保存数据集
-        output_path = self.save_dataset(processed_documents, output_file)
+        # 保存数据集到指定路径
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        self.save_dataset(processed_documents, output_path.name)
         
         # 生成统计信息
         stats = self.build_statistics(processed_documents)
@@ -226,7 +239,7 @@ def main():
     
     parser = argparse.ArgumentParser(description='构建数据集')
     parser.add_argument('--input', '-i', required=True, help='原始数据文件')
-    parser.add_argument('--output', '-o', default='documents.jsonl', help='输出文件名')
+    parser.add_argument('--output', '-o', default='data/structured/documents.jsonl', help='输出文件名')
     parser.add_argument('--data-dir', default='data')
     
     args = parser.parse_args()
