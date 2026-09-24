@@ -194,6 +194,50 @@ async def search_by_theme(theme: str, limit: int = 20):
     return search_service.search_by_theme(theme, limit)
 
 
+class OutlineRequest(BaseModel):
+    topic: str
+    requirement: Optional[str] = None
+    doc_type: Optional[str] = None
+
+
+class OutlineResponse(BaseModel):
+    title: str
+    document_type: str
+    topic: str
+    structure_pattern: str
+    outline: List[Dict[str, Any]]
+    related_documents: List[Dict[str, Any]]
+    evidence: List[Dict[str, Any]]
+    generated_at: str
+
+
+@app.post("/api/generate/outline", response_model=OutlineResponse)
+async def generate_outline(request: OutlineRequest):
+    """
+    生成文档大纲接口
+    
+    基于主题和需求生成结构化文档大纲
+    """
+    if not recommend_service:
+        raise HTTPException(status_code=503, detail="Recommendation service not initialized")
+    
+    # 使用DocumentOutlineBuilder生成大纲
+    from scripts.service.document_builder import DocumentOutlineBuilder
+    
+    builder = DocumentOutlineBuilder(
+        patterns_dir=Path(BASE_DIR / "knowledge/patterns"),
+        search_service=search_service
+    )
+    
+    outline = builder.build_document_outline(
+        topic=request.topic,
+        requirement=request.requirement,
+        doc_type=request.doc_type
+    )
+    
+    return outline
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

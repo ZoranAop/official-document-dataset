@@ -73,6 +73,13 @@ def main():
     recommend_parser.add_argument('--title', '-t', required=True, help='文档标题')
     recommend_parser.add_argument('--doc-type', help='文档类型')
     
+    # outline 命令
+    outline_parser = subparsers.add_parser('outline', help='生成文档大纲')
+    outline_parser.add_argument('--topic', '-t', required=True, help='文档主题')
+    outline_parser.add_argument('--doc-type', help='文档类型')
+    outline_parser.add_argument('--requirement', '-r', help='需求描述')
+    outline_parser.add_argument('--output', '-o', help='输出文件')
+    
     # full-pipeline 命令
     pipeline_parser = subparsers.add_parser('full-pipeline', help='执行完整流程')
     pipeline_parser.add_argument('--days', '-d', type=int, default=365, help='抓取近N天的数据')
@@ -138,6 +145,23 @@ def main():
         result = service.recommend_structure(args.title, args.doc_type)
         print(f"\n推荐结构: {result.get('recommended_structure', {}).get('pattern_name', '通用结构')}")
         print(f"置信度: {result.get('recommended_structure', {}).get('confidence', 0):.2f}")
+        
+    elif args.command == 'outline':
+        from scripts.service.document_builder import DocumentOutlineBuilder
+        builder = DocumentOutlineBuilder(Path('knowledge/patterns'))
+        
+        outline = builder.build_document_outline(
+            topic=args.topic,
+            requirement=args.requirement,
+            doc_type=args.doc_type
+        )
+        
+        if args.output:
+            with open(args.output, 'w', encoding='utf-8') as f:
+                json.dump(outline, f, ensure_ascii=False, indent=2)
+            print(f"大纲已保存到: {args.output}")
+        else:
+            print(json.dumps(outline, ensure_ascii=False, indent=2))
         
     elif args.command == 'full-pipeline':
         logger.info("="*60)
