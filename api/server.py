@@ -4,6 +4,11 @@ FastAPI服务
 提供RESTful API接口
 """
 
+import sys
+import os
+# 添加项目根目录到Python路径
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -12,7 +17,7 @@ from pathlib import Path
 from datetime import datetime
 import json
 
-from search import DocumentSearchService, StructureRecommendationService
+from scripts.service.search import DocumentSearchService, StructureRecommendationService
 
 app = FastAPI(
     title="Official Document Intelligence Service",
@@ -70,17 +75,17 @@ async def startup_event():
     global search_service, recommend_service
     
     db_path = Path("data/indexes/document_index.db")
-    patterns_path = Path("knowledge/patterns/patterns.json")
+    patterns_dir = Path("knowledge/patterns")
     
     if db_path.exists():
         search_service = DocumentSearchService(db_path)
     else:
         print(f"Warning: Database not found at {db_path}")
     
-    if patterns_path.exists():
-        recommend_service = StructureRecommendationService(patterns_path)
+    if patterns_dir.exists():
+        recommend_service = StructureRecommendationService(patterns_dir)
     else:
-        print(f"Warning: Patterns file not found at {patterns_path}")
+        print(f"Warning: Patterns directory not found at {patterns_dir}")
 
 
 @app.get("/")

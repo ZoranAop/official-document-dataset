@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 检索服务
-提供混合检索能力
+提供结构化检索能力
 """
 
 import json
@@ -42,10 +42,10 @@ class DocumentSearchService:
                limit: int = 20,
                offset: int = 0) -> Dict[str, Any]:
         """
-        混合检索
+        结构化检索
         
         支持：
-        - 标题/内容关键词搜索
+        - 关键词搜索（标题/内容）
         - 分类筛选
         - 类型筛选
         - 领域筛选
@@ -227,21 +227,61 @@ class DocumentSearchService:
         self.close()
         
         return dict(result) if result else None
+    
+    def get_statistics(self) -> Dict:
+        """获取统计数据"""
+        self.connect()
+        cursor = self.conn.cursor()
+        
+        stats = {}
+        
+        # 总文档数
+        cursor.execute('SELECT COUNT(*) as count FROM documents')
+        stats['total_documents'] = cursor.fetchone()['count']
+        
+        # 按分类统计
+        cursor.execute('SELECT category, COUNT(*) as count FROM documents GROUP BY category')
+        stats['by_category'] = {row['category']: row['count'] for row in cursor.fetchall()}
+        
+        # 按类型统计
+        cursor.execute('SELECT document_type, COUNT(*) as count FROM documents GROUP BY document_type')
+        stats['by_type'] = {row['document_type']: row['count'] for row in cursor.fetchall()}
+        
+        # 按日期统计
+        cursor.execute('SELECT SUBSTR(date, 1, 7) as year_month, COUNT(*) as count FROM documents GROUP BY year_month ORDER BY year_month DESC')
+        stats['by_date'] = {row['year_month']: row['count'] for row in cursor.fetchall()}
+        
+        self.close()
+        
+        return stats
 
 
 class StructureRecommendationService:
     """结构推荐服务"""
     
-    def __init__(self, patterns_path: Path):
-        self.patterns_path = patterns_path
+    def __init__(self, patterns_dir: Path):
+        self.patterns_dir = patterns_dir
         self.patterns = self._load_patterns()
     
     def _load_patterns(self) -> Dict:
-        """加载结构模式"""
-        if self.patterns_path.exists():
-            with open(self.patterns_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        return {}
+        """加载结构模式 - 从目录读取所有JSON文件"""
+        patterns = {}
+        
+        if not self.patterns_dir.exists():
+            logger.warning(f"Patterns directory not found: {self.patterns_dir}")
+            return patterns
+        
+        # 读取目录下所有JSON文件
+        for json_file in sorted(self.patterns_dir.glob('*.json')):
+            pattern_id = json_file.stem
+            try:
+                with open(json_file, 'r', encoding='utf-8') as f:
+                    patterns[pattern_id] = json.load(f)
+                logger.debug(f"Loaded pattern: {pattern_id}")
+            except Exception as e:
+                logger.error(f"Error loading pattern {pattern_id}: {e}")
+        
+        return patterns
     
     def recommend_structure(self, title: str, doc_type: str = None) -> Dict[str, Any]:
         """推荐文档结构"""
@@ -312,6 +352,14 @@ class StructureRecommendationService:
                     return doc_type
         
         return '其他'
+    
+    def get_patterns(self) -> Dict:
+        """获取所有可用模式"""
+        return {
+            'patterns': self.patterns,
+            'count': len(self.patterns),
+            'timestamp': datetime.now().isoformat()
+        }
 
 
 def main():
@@ -319,7 +367,7 @@ def main():
     
     parser = argparse.ArgumentParser(description='检索服务')
     parser.add_argument('--db-path', default='data/indexes/document_index.db')
-    parser.add_argument('--patterns-path', default='knowledge/patterns/patterns.json')
+    parser.add_argument('--patterns-dir', default='knowledge/patterns')
     
     args = parser.parse_args()
     
@@ -327,7 +375,7 @@ def main():
     search_service = DocumentSearchService(Path(args.db_path))
     
     # 测试结构推荐服务
-    recommend_service = StructureRecommendationService(Path(args.patterns_path))
+    recommend_service = StructureRecommendationService(Path(args.patterns_dir))
     
     # 测试搜索
     result = search_service.search(keywords='人工智能', limit=5)

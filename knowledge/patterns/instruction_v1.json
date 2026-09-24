@@ -73,6 +73,15 @@
     "meeting_v1"
   ],
   "evidence_count": 0,
+  "version_info": {
+    "analysis_version": "1.0.0",
+    "dataset_version": "2026.09",
+    "source_snapshot": "2026-09-24",
+    "analysis_period": {
+      "start": "2023-09-24",
+      "end": "2026-09-24"
+    }
+  },
   "created_at": "2026-09-24",
   "updated_at": "2026-09-24"
 }

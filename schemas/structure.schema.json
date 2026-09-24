@@ -27,14 +27,14 @@
             "type": "string",
             "description": "段落类型",
             "enum": [
-              "opening",           # 开头
-              "background",        # 背景
-              "context",           # 语境
-              "main_judgment",     # 主要判断
-              "core_requirement",  # 核心要求
-              "explanation",       # 解释说明
-              "implementation",    # 实施方向
-              "closing",           # 结尾
+              "opening",
+              "background",
+              "context",
+              "main_judgment",
+              "core_requirement",
+              "explanation",
+              "implementation",
+              "closing",
               "other"
             ]
           },
@@ -50,10 +50,12 @@
             }
           },
           "start_position": {
-            "type": "integer"
+            "type": "integer",
+            "description": "段落起始位置"
           },
           "end_position": {
-            "type": "integer"
+            "type": "integer",
+            "description": "段落结束位置"
           },
           "text_snippet": {
             "type": "string",
@@ -68,10 +70,17 @@
       "properties": {
         "logic_type": {
           "type": "string",
-          "enum": ["总-分-总", "背景-问题-方案", "判断-要求-实施", "其他"]
+          "description": "逻辑类型",
+          "enum": [
+            "总-分-总",
+            "背景-问题-方案",
+            "判断-要求-实施",
+            "其他"
+          ]
         },
         "transition_points": {
           "type": "array",
+          "description": "转折点和过渡句",
           "items": {
             "type": "string"
           }
@@ -80,25 +89,81 @@
     },
     "evidence": {
       "type": "array",
-      "description": "证据链",
+      "description": "证据链 - 支撑该结构模式的源文档列表",
       "items": {
         "type": "object",
+        "required": ["document_id"],
         "properties": {
           "document_id": {
-            "type": "string"
+            "type": "string",
+            "description": "源文档ID"
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "description": "源文档标题"
           },
           "date": {
-            "type": "string"
+            "type": "string",
+            "description": "发布日期"
           },
           "source_url": {
-            "type": "string"
+            "type": "string",
+            "description": "原文链接"
           },
           "support": {
             "type": "string",
-            "description": "支持说明"
+            "description": "支持说明 - 该文档如何支撑此模式"
+          }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "description": "统计信息",
+      "properties": {
+        "sample_count": {
+          "type": "integer",
+          "description": "样本数量"
+        },
+        "section_frequency": {
+          "type": "object",
+          "description": "各段落类型出现频率",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "version_info": {
+      "type": "object",
+      "description": "版本信息",
+      "properties": {
+        "analysis_version": {
+          "type": "string",
+          "description": "分析版本"
+        },
+        "dataset_version": {
+          "type": "string",
+          "description": "数据集版本"
+        },
+        "source_snapshot": {
+          "type": "string",
+          "description": "数据快照日期"
+        },
+        "analysis_period": {
+          "type": "object",
+          "description": "分析时间窗口",
+          "properties": {
+            "start": {
+              "type": "string",
+              "description": "开始日期"
+            },
+            "end": {
+              "type": "string",
+              "description": "结束日期"
+            }
           }
         }
       }
