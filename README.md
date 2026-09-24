@@ -128,24 +128,47 @@
 pip install -r requirements.txt
 ```
 
-### 首次运行
+### 数据更新
+
+项目提供了便捷的数据更新脚本，支持增量更新和全量抓取两种模式：
+
+#### 增量更新（推荐日常使用）
 
 ```bash
-# 方法1: 使用主程序
-python main.py full-pipeline --days 365
+# 使用Python脚本
+python update.py                    # 增量更新近7天数据
+python update.py --days 30          # 增量更新近30天数据
 
-# 方法2: 分步骤执行
-# Step 1: 抓取数据
-python main.py crawl --days 365
+# 使用Shell脚本（Linux/Mac）
+./update.sh                         # 增量更新近7天数据
+./update.sh --days 30               # 增量更新近30天数据
 
-# Step 2: 处理数据
-python main.py process --input data/raw/index/all_articles.json
+# 使用批处理脚本（Windows）
+update.bat                          # 增量更新近7天数据
+update.bat --days 30                # 增量更新近30天数据
+```
 
-# Step 3: 构建索引
-python main.py index --input data/structured/documents.jsonl
+#### 全量抓取
 
-# Step 4: 启动服务
-python main.py serve --port 8000
+```bash
+# 仅抓取文章索引
+python update.py --full
+
+# 抓取文章索引和正文内容
+python update.py --full --details
+
+# 使用其他脚本
+./update.sh --full
+update.bat --full --details
+```
+
+#### 定时更新
+
+可以将更新命令添加到 crontab（Linux/Mac）或任务计划程序（Windows）中：
+
+```bash
+# 每天凌晨2点自动增量更新
+0 2 * * * cd /path/to/project && python update.py --days 1
 ```
 
 ### 使用检索服务
