@@ -134,7 +134,7 @@ def main():
             
     elif args.command == 'recommend':
         from scripts.service.search import StructureRecommendationService
-        service = StructureRecommendationService(Path('knowledge/patterns/patterns.json'))
+        service = StructureRecommendationService(Path('knowledge/patterns'))
         result = service.recommend_structure(args.title, args.doc_type)
         print(f"\n推荐结构: {result.get('recommended_structure', {}).get('pattern_name', '通用结构')}")
         print(f"置信度: {result.get('recommended_structure', {}).get('confidence', 0):.2f}")
