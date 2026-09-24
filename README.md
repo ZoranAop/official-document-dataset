@@ -87,6 +87,34 @@
          结构化规范文档
 ```
 
+## 数据规模
+
+### 已采集数据（截至 2026-09-24）
+
+- **总文档数**: 779 篇
+- **时间范围**: 2021-2026（近6年）
+- **分类覆盖**: 最新、国内、国际、讲话、指示、活动
+
+### 年份分布
+
+| 年份 | 文档数 |
+|------|--------|
+| 2021 | 32 |
+| 2022 | 86 |
+| 2023 | 76 |
+| 2024 | 183 |
+| 2025 | 254 |
+| 2026 | 148 |
+
+### 分类统计
+
+- 最新 (latest): 150篇
+- 国内 (domestic): 150篇
+- 国际 (international): 150篇
+- 讲话 (speech): 148篇
+- 指示 (instruction): 148篇
+- 活动 (activity): 40篇
+
 ## 快速开始
 
 ### 环境要求
@@ -152,15 +180,15 @@ API端点：
 ```
 official-document-dataset/
 ├── config/                    # 配置文件
-│   ├── sources.yaml          # 数据源配置
-│   ├── categories.yaml       # 分类配置
-│   └── schema.yaml           # Schema配置
+│   └── sources.yaml          # 数据源配置
 ├── scripts/
 │   ├── crawler/              # 爬虫脚本
 │   │   ├── base_crawler.py   # 爬虫基类
 │   │   ├── fetch_index.py    # 抓取索引页
 │   │   ├── fetch_document.py # 抓取单篇文章
-│   │   └── update_recent.py  # 增量更新
+│   │   ├── update_recent.py  # 增量更新
+│   │   ├── full_crawl.py     # 全量抓取（新增）
+│   │   └── parse_existing_html.py  # 解析已有HTML（新增）
 │   ├── parser/               # 解析脚本
 │   │   ├── clean_html.py     # HTML清洗
 │   │   ├── extract_metadata.py # 元数据提取
@@ -179,7 +207,7 @@ official-document-dataset/
 │       ├── retrieve.py         # 命令行检索
 │       └── recommend_structure.py # 结构推荐
 ├── data/
-│   ├── raw/                  # 原始数据
+│   ├── raw/                  # 原始数据（不提交Git）
 │   ├── normalized/           # 标准化数据
 │   ├── structured/           # 结构化数据
 │   └── indexes/              # 索引数据
@@ -187,7 +215,7 @@ official-document-dataset/
 │   ├── topics/               # 主题库
 │   ├── concepts/             # 概念库
 │   ├── structures/           # 结构库
-│   └── patterns/             # 模式库
+│   └── patterns/             # 模式库（7种文档结构模板）
 ├── schemas/                  # Schema定义
 ├── tests/                    # 测试
 ├── api/                      # API服务
@@ -247,6 +275,11 @@ official-document-dataset/
 6. **主题搜索** - 按主题/概念搜索
 7. **相关文档** - 基于关键词推荐相关文档
 
+## 版权说明
+
+数据来源：人民网习近平系列重要讲话数据库
+- 原文地址：https://jhsjk.people.cn/
+- 版权声明：未经书面授权禁止使用
 
 本项目仅供内部研究、结构分析、检索和模型辅助使用。
 
@@ -272,3 +305,4 @@ official-document-dataset/
 
 本项目仅供研究和内部使用。
 
+数据来源的版权归人民网所有。
