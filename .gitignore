@@ -1,0 +1,10 @@
+data/raw/
+data/structured/
+data/indexes/
+scripts/**/__pycache__/
+*.pyc
+*.pyo
+*.db
+*.jsonl
+*.sqlite
+*.sqlite3
