@@ -1105,6 +1105,7 @@ API端点：
 - `GET /api/documents/{doc_id}/related` - 获取相关文档
 - `POST /api/recommend/structure` - 推荐文档结构
 - `GET /api/statistics` - 统计数据
+- `POST /api/generate/outline` - 生成文档大纲
 
 ---
 
