@@ -6,14 +6,16 @@ FastAPI服务
 
 import sys
 import os
+from pathlib import Path
+
 # 添加项目根目录到Python路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(BASE_DIR))
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
-from pathlib import Path
 from datetime import datetime
 import json
 
@@ -74,8 +76,9 @@ async def startup_event():
     """启动时初始化服务"""
     global search_service, recommend_service
     
-    db_path = Path("data/indexes/document_index.db")
-    patterns_dir = Path("knowledge/patterns")
+    # 使用绝对路径，确保从任何目录启动都能正确找到文件
+    db_path = BASE_DIR / "data" / "indexes" / "document_index.db"
+    patterns_dir = BASE_DIR / "knowledge" / "patterns"
     
     if db_path.exists():
         search_service = DocumentSearchService(db_path)
