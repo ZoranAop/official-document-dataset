@@ -1,0 +1,78 @@
+{
+  "pattern_id": "foreign_affairs_v1",
+  "document_type": "出访",
+  "pattern_name": "出访活动标准结构",
+  "version": "1.0",
+  "description": "适用于习近平出访活动的标准结构",
+  "structure": [
+    {
+      "section_name": "出访背景",
+      "section_type": "background",
+      "order": 1,
+      "required": true,
+      "description": "出访的原因、邀请方、时间等背景信息",
+      "typical_length": "1段"
+    },
+    {
+      "section_name": "出访行程",
+      "section_type": "context",
+      "order": 2,
+      "required": true,
+      "description": "访问的国家、城市、行程安排",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "双边活动",
+      "section_type": "main_body",
+      "order": 3,
+      "required": true,
+      "description": "会见、会谈、签约仪式等活动内容",
+      "typical_length": "2-4段"
+    },
+    {
+      "section_name": "讲话要点",
+      "section_type": "core_requirement",
+      "order": 4,
+      "required": false,
+      "description": "在访问期间发表的重要讲话内容",
+      "typical_length": "2-5段"
+    },
+    {
+      "section_name": "成果与意义",
+      "section_type": "closing",
+      "order": 5,
+      "required": false,
+      "description": "出访取得的成果和重要意义",
+      "typical_length": "1段"
+    }
+  ],
+  "common_sequence": [
+    "background",
+    "itinerary",
+    "activities",
+    "speeches",
+    "outcomes"
+  ],
+  "optional_sections": [
+    "speeches",
+    "outcomes"
+  ],
+  "typical_characteristics": {
+    "length_range": "800-3000字",
+    "tone": "庄重、外交礼仪",
+    "formality": "正式",
+    "style": "突出外交成果和合作意义"
+  },
+  "example_titles": [
+    "习近平离京对美国进行国事访问",
+    "习近平出席金砖国家领导人会晤",
+    "习近平对XX国进行国事访问"
+  ],
+  "related_patterns": [
+    "speech_v1",
+    "inspection_v1"
+  ],
+  "evidence_count": 0,
+  "created_at": "2026-09-24",
+  "updated_at": "2026-09-24"
+}

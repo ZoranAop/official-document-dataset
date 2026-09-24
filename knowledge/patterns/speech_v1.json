@@ -1,0 +1,79 @@
+{
+  "pattern_id": "speech_v1",
+  "document_type": "讲话",
+  "pattern_name": "重要讲话标准结构",
+  "version": "1.0",
+  "description": "适用于习近平重要讲话的标准结构模式，通常包含开场、背景、主体内容和号召结尾等部分",
+  "structure": [
+    {
+      "section_name": "开场/称谓",
+      "section_type": "opening",
+      "order": 1,
+      "required": true,
+      "description": "会议名称、与会者称谓等开场内容",
+      "typical_length": "1段"
+    },
+    {
+      "section_name": "背景/语境",
+      "section_type": "context",
+      "order": 2,
+      "required": true,
+      "description": "讲话的背景、时机和意义",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "主体内容",
+      "section_type": "main_body",
+      "order": 3,
+      "required": true,
+      "description": "讲话的核心内容，可能包含多个要点",
+      "typical_length": "3-10段"
+    },
+    {
+      "section_name": "要求/号召",
+      "section_type": "requirements",
+      "order": 4,
+      "required": true,
+      "description": "提出的具体要求或对读者的号召",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "结尾",
+      "section_type": "closing",
+      "order": 5,
+      "required": false,
+      "description": "祝福语、号召语或总结性话语",
+      "typical_length": "1段"
+    }
+  ],
+  "common_sequence": [
+    "opening",
+    "context",
+    "content",
+    "requirements",
+    "closing"
+  ],
+  "optional_sections": [
+    "example",
+    "quote",
+    "closing"
+  ],
+  "typical_characteristics": {
+    "length_range": "1000-5000字",
+    "tone": "庄重、鼓舞、富有感染力",
+    "formality": "正式",
+    "style": "既有理论高度，又有实践指导"
+  },
+  "example_titles": [
+    "在纪念江泽民同志诞辰100周年大会上的讲话",
+    "在XX会议上的讲话",
+    "习近平在XX场合发表重要讲话"
+  ],
+  "related_patterns": [
+    "instruction_v1",
+    "meeting_v1"
+  ],
+  "evidence_count": 0,
+  "created_at": "2026-09-24",
+  "updated_at": "2026-09-24"
+}

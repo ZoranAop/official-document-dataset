@@ -1,0 +1,74 @@
+{
+  "pattern_id": "congratulatory_letter_v1",
+  "document_type": "函电",
+  "pattern_name": "贺电贺信标准结构",
+  "version": "1.0",
+  "description": "适用于习近平发出的贺电、贺信的标准结构",
+  "structure": [
+    {
+      "section_name": "称谓",
+      "section_type": "opening",
+      "order": 1,
+      "required": true,
+      "description": "收件方称谓",
+      "typical_length": "1行"
+    },
+    {
+      "section_name": "祝贺缘由",
+      "section_type": "background",
+      "order": 2,
+      "required": true,
+      "description": "说明发出贺电/贺信的原因和背景",
+      "typical_length": "1段"
+    },
+    {
+      "section_name": "肯定评价",
+      "section_type": "main_judgment",
+      "order": 3,
+      "required": true,
+      "description": "对活动或成果的评价和肯定",
+      "typical_length": "1段"
+    },
+    {
+      "section_name": "美好祝愿",
+      "section_type": "closing",
+      "order": 4,
+      "required": true,
+      "description": "表达祝愿和期望",
+      "typical_length": "1段"
+    },
+    {
+      "section_name": "落款",
+      "section_type": "other",
+      "order": 5,
+      "required": true,
+      "description": "发件人姓名和日期",
+      "typical_length": "1-2行"
+    }
+  ],
+  "common_sequence": [
+    "salutation",
+    "reason",
+    "appraisal",
+    "wishes",
+    "signature"
+  ],
+  "optional_sections": [],
+  "typical_characteristics": {
+    "length_range": "200-800字",
+    "tone": "友好、庄重",
+    "formality": "正式",
+    "style": "简洁明了，情感真挚"
+  },
+  "example_titles": [
+    "习近平就XX event致贺电",
+    "习近平向XX活动致贺信",
+    "习近平就XX事向XX致贺电"
+  ],
+  "related_patterns": [
+    "speech_v1"
+  ],
+  "evidence_count": 0,
+  "created_at": "2026-09-24",
+  "updated_at": "2026-09-24"
+}

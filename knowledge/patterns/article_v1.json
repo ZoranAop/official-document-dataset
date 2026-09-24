@@ -1,0 +1,68 @@
+{
+  "pattern_id": "article_v1",
+  "document_type": "文章",
+  "pattern_name": "重要文章标准结构",
+  "version": "1.0",
+  "description": "适用于习近平重要文章的标准结构",
+  "structure": [
+    {
+      "section_name": "标题",
+      "section_type": "opening",
+      "order": 1,
+      "required": true,
+      "description": "文章标题",
+      "typical_length": "1行"
+    },
+    {
+      "section_name": "导语/开篇",
+      "section_type": "background",
+      "order": 2,
+      "required": true,
+      "description": "文章的开篇，点明主题和背景",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "主体论述",
+      "section_type": "main_body",
+      "order": 3,
+      "required": true,
+      "description": "文章的核心论述部分",
+      "typical_length": "5-15段"
+    },
+    {
+      "section_name": "总结升华",
+      "section_type": "closing",
+      "order": 4,
+      "required": false,
+      "description": "文章的总结和升华部分",
+      "typical_length": "1-2段"
+    }
+  ],
+  "common_sequence": [
+    "title",
+    "intro",
+    "body",
+    "conclusion"
+  ],
+  "optional_sections": [
+    "conclusion"
+  ],
+  "typical_characteristics": {
+    "length_range": "2000-8000字",
+    "tone": "理论性强、思想深刻",
+    "formality": "正式",
+    "style": "论述严密，逻辑清晰"
+  },
+  "example_titles": [
+    "习近平：XXX（文章名）",
+    "习近平重要文章：XXX",
+    "《XXX》（习近平文章名）"
+  ],
+  "related_patterns": [
+    "speech_v1",
+    "instruction_v1"
+  ],
+  "evidence_count": 0,
+  "created_at": "2026-09-24",
+  "updated_at": "2026-09-24"
+}

@@ -1,0 +1,59 @@
+{
+  "pattern_id": "inspection_v1",
+  "document_type": "考察",
+  "pattern_name": "考察调研标准结构",
+  "version": "1.0",
+  "description": "适用于习近平考察调研活动的标准结构，通常包含行程、内容和指示要求等部分",
+  "structure": [
+    {
+      "section_name": "考察行程",
+      "section_type": "background",
+      "order": 1,
+      "required": true,
+      "description": "考察的时间、地点、路线",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "考察内容",
+      "section_type": "context",
+      "order": 2,
+      "required": true,
+      "description": "考察的具体活动、参观的项目、交流的内容",
+      "typical_length": "2-4段"
+    },
+    {
+      "section_name": "指示要求",
+      "section_type": "core_requirement",
+      "order": 3,
+      "required": true,
+      "description": "考察期间发表的重要指示和要求",
+      "typical_length": "2-5段"
+    }
+  ],
+  "common_sequence": [
+    "route",
+    "content",
+    "requirements"
+  ],
+  "optional_sections": [
+    "interaction"
+  ],
+  "typical_characteristics": {
+    "length_range": "500-2000字",
+    "tone": "务实、指导性强",
+    "formality": "正式",
+    "style": "结合实地观察提出具体要求"
+  },
+  "example_titles": [
+    "习近平在上海考察时强调",
+    "习近平在XX考察调研时强调",
+    "习近平前往XX考察"
+  ],
+  "related_patterns": [
+    "speech_v1",
+    "instruction_v1"
+  ],
+  "evidence_count": 0,
+  "created_at": "2026-09-24",
+  "updated_at": "2026-09-24"
+}

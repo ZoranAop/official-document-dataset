@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Document Structure Schema",
+  "description": "文档结构分析Schema",
+  "type": "object",
+  "required": ["pattern_id", "sections"],
+  "properties": {
+    "pattern_id": {
+      "type": "string",
+      "description": "结构模式ID",
+      "example": "instruction_v1"
+    },
+    "confidence": {
+      "type": "number",
+      "description": "匹配置信度",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "sections": {
+      "type": "array",
+      "description": "文档段落结构",
+      "items": {
+        "type": "object",
+        "required": ["type", "summary"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "段落类型",
+            "enum": [
+              "opening",           # 开头
+              "background",        # 背景
+              "context",           # 语境
+              "main_judgment",     # 主要判断
+              "core_requirement",  # 核心要求
+              "explanation",       # 解释说明
+              "implementation",    # 实施方向
+              "closing",           # 结尾
+              "other"
+            ]
+          },
+          "summary": {
+            "type": "string",
+            "description": "段落摘要"
+          },
+          "key_points": {
+            "type": "array",
+            "description": "关键点列表",
+            "items": {
+              "type": "string"
+            }
+          },
+          "start_position": {
+            "type": "integer"
+          },
+          "end_position": {
+            "type": "integer"
+          },
+          "text_snippet": {
+            "type": "string",
+            "description": "文本片段（前100字）"
+          }
+        }
+      }
+    },
+    "argument_flow": {
+      "type": "object",
+      "description": "论述流程",
+      "properties": {
+        "logic_type": {
+          "type": "string",
+          "enum": ["总-分-总", "背景-问题-方案", "判断-要求-实施", "其他"]
+        },
+        "transition_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "description": "证据链",
+      "items": {
+        "type": "object",
+        "properties": {
+          "document_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": "string"
+          },
+          "support": {
+            "type": "string",
+            "description": "支持说明"
+          }
+        }
+      }
+    }
+  }
+}

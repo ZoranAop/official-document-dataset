@@ -1,0 +1,69 @@
+{
+  "pattern_id": "meeting_v1",
+  "document_type": "会议",
+  "pattern_name": "会议报道标准结构",
+  "version": "1.0",
+  "description": "适用于中共中央政治局会议、常委会会议等会议报道的标准结构",
+  "structure": [
+    {
+      "section_name": "会议基本信息",
+      "section_type": "opening",
+      "order": 1,
+      "required": true,
+      "description": "会议时间、地点、主持者、参会者等",
+      "typical_length": "1段"
+    },
+    {
+      "section_name": "会议内容",
+      "section_type": "main_judgment",
+      "order": 2,
+      "required": true,
+      "description": "会议讨论的内容、达成的共识或作出的决定",
+      "typical_length": "2-5段"
+    },
+    {
+      "section_name": "会议决定",
+      "section_type": "core_requirement",
+      "order": 3,
+      "required": false,
+      "description": "会议作出的具体决定或部署",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "出席人员",
+      "section_type": "other",
+      "order": 4,
+      "required": false,
+      "description": "列出出席会议的重要人员",
+      "typical_length": "1段"
+    }
+  ],
+  "common_sequence": [
+    "info",
+    "content",
+    "decision",
+    "attendees"
+  ],
+  "optional_sections": [
+    "decision",
+    "attendees"
+  ],
+  "typical_characteristics": {
+    "length_range": "300-1500字",
+    "tone": "客观、准确、简练",
+    "formality": "正式",
+    "style": "新闻报道风格，事实陈述为主"
+  },
+  "example_titles": [
+    "中共中央政治局召开会议",
+    "十四届全国人大常委会第二十四次会议闭幕",
+    "习近平主持召开XX座谈会"
+  ],
+  "related_patterns": [
+    "speech_v1",
+    "instruction_v1"
+  ],
+  "evidence_count": 0,
+  "created_at": "2026-09-24",
+  "updated_at": "2026-09-24"
+}

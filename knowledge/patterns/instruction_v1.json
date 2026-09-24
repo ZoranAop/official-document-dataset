@@ -1,0 +1,78 @@
+{
+  "pattern_id": "instruction_v1",
+  "document_type": "指示",
+  "pattern_name": "指示类文档标准结构",
+  "version": "1.0",
+  "description": "适用于习近平重要指示的标准结构模式，通常包含背景、判断、要求、任务和实施保障等部分",
+  "structure": [
+    {
+      "section_name": "背景/语境",
+      "section_type": "background",
+      "order": 1,
+      "required": true,
+      "description": "说明指示的背景、时机或触发事件",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "核心判断",
+      "section_type": "main_judgment",
+      "order": 2,
+      "required": true,
+      "description": "对当前形势或问题的基本判断和认识",
+      "typical_length": "1段"
+    },
+    {
+      "section_name": "总体要求",
+      "section_type": "core_requirement",
+      "order": 3,
+      "required": true,
+      "description": "提出的总体要求或指导原则",
+      "typical_length": "1-2段"
+    },
+    {
+      "section_name": "重点任务",
+      "section_type": "implementation",
+      "order": 4,
+      "required": true,
+      "description": "具体的工作任务和要求",
+      "typical_length": "3-5项"
+    },
+    {
+      "section_name": "实施保障",
+      "section_type": "implementation",
+      "order": 5,
+      "required": false,
+      "description": "加强组织领导、完善机制等保障措施",
+      "typical_length": "1段"
+    }
+  ],
+  "common_sequence": [
+    "background",
+    "judgment",
+    "requirement",
+    "task",
+    "implementation"
+  ],
+  "optional_sections": [
+    "background",
+    "example"
+  ],
+  "typical_characteristics": {
+    "length_range": "500-2000字",
+    "tone": "严肃、权威、明确",
+    "formality": "正式",
+    "style": "直接提出要求，语言简练"
+  },
+  "example_titles": [
+    "习近平就发展先进制造业作出重要指示",
+    "习近平对XX工作作出重要指示",
+    "习近平就XX问题作出重要指示强调"
+  ],
+  "related_patterns": [
+    "speech_v1",
+    "meeting_v1"
+  ],
+  "evidence_count": 0,
+  "created_at": "2026-09-24",
+  "updated_at": "2026-09-24"
+}

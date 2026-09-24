@@ -1,0 +1,153 @@
+# 数据源配置
+sources:
+  primary:
+    name: "人民网习近平系列重要讲话数据库"
+    url: "https://jhsjk.people.cn/"
+    base_url: "https://jhsjk.people.cn"
+    user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    rate_limit: 1  # 每秒请求间隔（秒）
+    
+  categories:
+    latest:
+      form_id: "701"
+      name: "最新"
+      description: "最新发布的讲话和指示"
+      
+    domestic:
+      form_id: "702"
+      name: "国内"
+      description: "国内活动和讲话"
+      
+    international:
+      form_id: "703"
+      name: "国际"
+      description: "国际访问和外事活动"
+      
+    speech:
+      form_id: "704"
+      name: "讲话"
+      description: "正式讲话内容"
+      
+    instruction:
+      form_id: "705"
+      name: "指示"
+      description: "重要指示内容"
+      
+    activity:
+      form_id: "706"
+      name: "重要活动"
+      description: "重要会议和活动"
+      
+    important_speech:
+      form_id: "707"
+      name: "重要讲话"
+      description: "重要讲话内容"
+      
+    important_article:
+      form_id: "708"
+      name: "重要文章"
+      description: "重要文章发表"
+      
+  document_types:
+    meeting:
+      type_id: "701"
+      name: "会议"
+      description: "各类会议活动"
+      
+    activity:
+      type_id: "702"
+      name: "活动"
+      description: "各类活动"
+      
+    inspection:
+      type_id: "703"
+      name: "考察"
+      description: "考察调研活动"
+      
+    meeting_person:
+      type_id: "704"
+      name: "会见"
+      description: "会见活动"
+      
+    visit:
+      type_id: "705"
+      name: "出访"
+      description: "出访活动"
+      
+    speech:
+      type_id: "706"
+      name: "讲话"
+      description: "讲话内容"
+      
+    correspondence:
+      type_id: "707"
+      name: "函电"
+      description: "函电内容"
+      
+    other:
+      type_id: "708"
+      name: "其他"
+      description: "其他类型"
+      
+  domains:
+    economy:
+      domain_id: "101"
+      name: "经济"
+      description: "经济建设相关"
+      
+    politics:
+      domain_id: "102"
+      name: "政治"
+      description: "政治建设相关"
+      
+    culture:
+      domain_id: "103"
+      name: "文化"
+      description: "文化建设相关"
+      
+    society:
+      domain_id: "104"
+      name: "社会"
+      description: "社会建设相关"
+      
+    ecology:
+      domain_id: "105"
+      name: "生态"
+      description: "生态文明建设相关"
+      
+    party_building:
+      domain_id: "106"
+      name: "党建"
+      description: "党的建设相关"
+      
+    defense:
+      domain_id: "107"
+      name: "国防"
+      description: "国防和军队建设相关"
+      
+    diplomacy:
+      domain_id: "108"
+      name: "外交"
+      description: "外交活动相关"
+      
+  sources:
+    people_daily:
+      id: "1"
+      name: "人民日报"
+      
+    xinhua:
+      id: "2"
+      name: "新华社"
+      
+    qiushi:
+      id: "3"
+      name: "求是"
+      
+# 搜索配置
+search:
+  max_results: 100
+  default_limit: 20
+  supported_formats:
+    - markdown
+    - json
+    - html_structure

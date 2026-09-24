@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pattern Schema",
+  "description": "结构模式Schema",
+  "type": "object",
+  "required": ["pattern_id", "document_type", "structure"],
+  "properties": {
+    "pattern_id": {
+      "type": "string",
+      "description": "模式ID",
+      "example": "instruction_v1"
+    },
+    "document_type": {
+      "type": "string",
+      "description": "文档类型"
+    },
+    "pattern_name": {
+      "type": "string",
+      "description": "模式名称"
+    },
+    "version": {
+      "type": "string",
+      "description": "版本"
+    },
+    "structure": {
+      "type": "array",
+      "description": "结构定义",
+      "items": {
+        "type": "object",
+        "properties": {
+          "section_name": {
+            "type": "string"
+          },
+          "section_type": {
+            "type": "string"
+          },
+          "order": {
+            "type": "integer"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "common_sequence": {
+      "type": "array",
+      "description": "常见段落顺序",
+      "items": {
+        "type": "string"
+      }
+    },
+    "optional_sections": {
+      "type": "array",
+      "description": "可选段落",
+      "items": {
+        "type": "string"
+      }
+    },
+    "example_patterns": {
+      "type": "array",
+      "description": "示例模式",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pattern_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "typical_length": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "typical_characteristics": {
+      "type": "object",
+      "description": "典型特征",
+      "properties": {
+        "length_range": {
+          "type": "string",
+          "description": "字数范围"
+        },
+        "tone": {
+          "type": "string",
+          "description": "语气风格"
+        },
+        "formality": {
+          "type": "string",
+          "enum": ["正式", "半正式", "非正式"]
+        }
+      }
+    },
+    "related_patterns": {
+      "type": "array",
+      "description": "相关模式",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_count": {
+      "type": "integer",
+      "description": "支撑文档数量"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
