@@ -272,4 +272,3 @@ official-document-dataset/
 
 本项目仅供研究和内部使用。
 
-数据来源的版权归人民网所有。
