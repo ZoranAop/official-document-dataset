@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import List, Dict, Set
-from base_crawler import CrawlerConfig, BaseCrawler, Document
+from scripts.crawler.base_crawler import CrawlerConfig, BaseCrawler, Document
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,29 +17,12 @@ logger = logging.getLogger(__name__)
 
 class UpdateCrawler(BaseCrawler):
     """增量更新爬虫"""
-    
+
     def __init__(self, config: CrawlerConfig, data_dir: Path):
         super().__init__(config)
         self.data_dir = data_dir
         self.existing_ids_file = data_dir / 'existing_doc_ids.json'
-        self.existing_ids: Set[str] = self._load_existing_ids()
-    
-    def _load_existing_ids(self) -> Set[str]:
-        """加载已存在的文档ID"""
-        if self.existing_ids_file.exists():
-            with open(self.existing_ids_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                return set(data.get('doc_ids', []))
-        return set()
-    
-    def _save_existing_ids(self, doc_ids: Set[str]):
-        """保存文档ID列表"""
-        data = {
-            'updated_at': datetime.now().isoformat(),
-            'doc_ids': list(doc_ids)
-        }
-        with open(self.existing_ids_file, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2)
+        self.existing_ids = self._load_existing_ids()
     
     def fetch_new_articles(self, days: int = 30, max_articles: int = 100) -> List[Dict]:
         """抓取新文章"""
@@ -47,7 +30,7 @@ class UpdateCrawler(BaseCrawler):
         logger.info(f"Fetching articles since {cutoff_date}, max {max_articles}")
         
         new_articles = []
-        categories = ['latest', 'domestic', 'international']
+        categories = list(self.config.config['sources']['categories'].keys())
         
         for category in categories:
             if len(new_articles) >= max_articles:

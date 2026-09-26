@@ -8,7 +8,7 @@ import json
 import logging
 from pathlib import Path
 from typing import List, Dict
-from base_crawler import CrawlerConfig, BaseCrawler
+from scripts.crawler.base_crawler import CrawlerConfig, BaseCrawler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

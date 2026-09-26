@@ -11,7 +11,7 @@ import time
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Set
 from dataclasses import dataclass, asdict
 import requests
 from bs4 import BeautifulSoup
@@ -73,7 +73,7 @@ class CrawlerConfig:
             with open(config_file, 'r', encoding='utf-8') as f:
                 return yaml.safe_load(f)
         else:
-            logger.warning(f"Config file not found: {config_path}, using defaults")
+            logger.warning(f"Config file not found: {self.config_path}, using defaults")
             return self._default_config()
     
     def _default_config(self) -> Dict:
@@ -117,7 +117,7 @@ class CrawlerConfig:
                     'defense': {'domain_id': '107', 'name': '国防'},
                     'diplomacy': {'domain_id': '108', 'name': '外交'},
                 },
-                'sources': {
+                'providers': {
                     'people_daily': {'id': '1', 'name': '人民日报'},
                     'xinhua': {'id': '2', 'name': '新华社'},
                     'qiushi': {'id': '3', 'name': '求是'},
@@ -154,13 +154,34 @@ class CrawlerConfig:
 
 class BaseCrawler:
     """爬虫基类"""
-    
+
     def __init__(self, config: CrawlerConfig):
         self.config = config
         self.session = config.session
         self.rate_limit = config.get_rate_limit()
         self.data_dir = Path("data/raw")
         self.data_dir.mkdir(parents=True, exist_ok=True)
+        self.existing_ids_file: Optional[Path] = None
+        self.existing_ids: Set[str] = set()
+
+    def _load_existing_ids(self) -> Set[str]:
+        """加载已存在的文档ID"""
+        if not self.existing_ids_file or not self.existing_ids_file.exists():
+            return set()
+        with open(self.existing_ids_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return set(data.get('doc_ids', []))
+
+    def _save_existing_ids(self, doc_ids: Set[str]):
+        """保存文档ID列表"""
+        if not self.existing_ids_file:
+            return
+        data = {
+            'updated_at': datetime.now().isoformat(),
+            'doc_ids': list(doc_ids)
+        }
+        with open(self.existing_ids_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2)
     
     def fetch_page(self, url: str, params: Dict = None) -> Optional[BeautifulSoup]:
         """抓取页面"""

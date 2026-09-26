@@ -10,7 +10,9 @@ import time
 from pathlib import Path
 from typing import List, Dict, Set
 from datetime import datetime
-from base_crawler import CrawlerConfig, BaseCrawler
+from scripts.crawler.base_crawler import CrawlerConfig, BaseCrawler
+from scripts.parser.clean_html import clean_html
+from scripts.parser.extract_metadata import MetadataExtractor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -149,9 +151,6 @@ class CategoryCrawler(BaseCrawler):
             return article
         
         # 解析内容
-        from clean_html import clean_html
-        from extract_metadata import MetadataExtractor
-        
         html_content = soup.prettify()
         
         # 保存原始HTML

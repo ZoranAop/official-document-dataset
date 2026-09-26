@@ -10,7 +10,9 @@ import time
 from pathlib import Path
 from typing import List, Dict, Set
 from datetime import datetime
-from base_crawler import CrawlerConfig, BaseCrawler
+from scripts.crawler.base_crawler import CrawlerConfig, BaseCrawler
+from scripts.parser.clean_html import clean_html
+from scripts.parser.extract_metadata import MetadataExtractor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class FullDataCrawler(BaseCrawler):
     """全量数据爬虫 - 抓取近三年所有文章"""
-    
+
     def __init__(self, config: CrawlerConfig, data_dir: Path):
         super().__init__(config)
         self.data_dir = data_dir
@@ -26,27 +28,8 @@ class FullDataCrawler(BaseCrawler):
         self.index_dir.mkdir(parents=True, exist_ok=True)
         self.documents_dir = data_dir / 'documents'
         self.documents_dir.mkdir(parents=True, exist_ok=True)
-        
-        # 加载已存在的文档ID
         self.existing_ids_file = data_dir / 'existing_doc_ids.json'
-        self.existing_ids: Set[str] = self._load_existing_ids()
-    
-    def _load_existing_ids(self) -> Set[str]:
-        """加载已存在的文档ID"""
-        if self.existing_ids_file.exists():
-            with open(self.existing_ids_file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                return set(data.get('doc_ids', []))
-        return set()
-    
-    def _save_existing_ids(self, doc_ids: Set[str]):
-        """保存文档ID列表"""
-        data = {
-            'updated_at': datetime.now().isoformat(),
-            'doc_ids': list(doc_ids)
-        }
-        with open(self.existing_ids_file, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2)
+        self.existing_ids = self._load_existing_ids()
     
     def fetch_all_articles(self, max_pages_per_category: int = 50) -> List[Dict]:
         """抓取所有分类的所有文章"""
@@ -140,9 +123,6 @@ class FullDataCrawler(BaseCrawler):
             return article
         
         # 解析内容
-        from clean_html import clean_html
-        from extract_metadata import MetadataExtractor
-        
         html_content = soup.prettify()
         
         # 保存原始HTML
