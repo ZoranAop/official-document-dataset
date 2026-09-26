@@ -19,14 +19,16 @@
 ### 抓取脚本
 
 ```bash
-# 增量更新
-python update.py --days 7
+# 增量更新（推荐日常使用）
+python scripts/crawler/update_recent.py --days 7
 
 # 全量抓取
-python update.py --full
+python scripts/crawler/full_crawl.py --max-pages 50
 
-# 指定分类
-python scripts/crawler/fetch_category.py --category wk --max-pages 50
+# 通过 update.py 统一入口
+python update.py --days 30        # 增量更新近30天数据
+python update.py --full           # 全量抓取文章索引
+python update.py --full --details # 全量抓取并获取文章正文
 ```
 
 ## 数据处理流程
@@ -69,7 +71,9 @@ build_index.py - 构建检索索引
 
 | 脚本 | 功能 |
 |------|------|
-| `scripts/crawler/fetch_*.py` | 数据采集 |
+| `scripts/crawler/update_recent.py` | 增量更新 - 抓取近N天新文章 |
+| `scripts/crawler/full_crawl.py` | 全量抓取 - 按年份分页抓取所有文章 |
+| `scripts/crawler/base_crawler.py` | 爬虫基类 - HTTP请求、解析、存储 |
 | `scripts/parser/clean_html.py` | HTML清洗 |
 | `scripts/parser/extract_metadata.py` | 元数据提取 |
 | `scripts/analyzer/structure_analyzer.py` | 结构分析 |
@@ -77,6 +81,7 @@ build_index.py - 构建检索索引
 | `scripts/dataset/build_index.py` | 索引构建 |
 | `scripts/service/search.py` | 检索服务 |
 | `scripts/service/document_builder.py` | 大纲生成 |
+| `update.py` | 统一入口 - 调用 update_recent.py 或 full_crawl.py |
 
 ## 数据合并
 

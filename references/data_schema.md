@@ -64,6 +64,13 @@
 
 ## 数据文件
 
-- `data/structured/all_documents.jsonl` - 合并后的完整数据集
-- `data/indexes/document_index.db` - SQLite检索索引
-- `knowledge/patterns/*.json` - 结构模式定义
+> 以下数据为**运行时生成**，已加入 `.gitignore`，不会提交到 Git 仓库。
+
+- `data/structured/all_documents.jsonl` - 合并后的完整数据集（生成自 `build_dataset.py`）
+- `data/indexes/document_index.db` - SQLite检索索引（生成自 `build_index.py`）
+- `knowledge/patterns/*.json` - 结构模式定义（Git 版本库中的静态数据）
+
+```bash
+# 首次运行后会生成以下目录
+mkdir -p data/raw data/structured data/indexes
+```

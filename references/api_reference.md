@@ -4,7 +4,7 @@
 
 - 服务地址: http://localhost:8000
 - 数据源: SQLite + JSONL
-- 总文档数: ~3,000篇
+- 文档数量: 以运行时统计接口 `GET /api/statistics` 返回为准
 
 ## API端点
 
@@ -137,7 +137,7 @@ GET /api/statistics
 **响应:**
 ```json
 {
-  "total_documents": 3161,
+  "total_documents": <runtime value>,
   "by_category": {...},
   "by_type": {...},
   "by_domain": {...},

@@ -3,214 +3,107 @@ name: official-document-intelligence
 description: Official Document Intelligence Dataset and Service. Provides document retrieval, structure analysis, pattern matching, and content generation assistance for AI/Agent systems. Use when: (1) User needs to search or retrieve official documents, (2) User wants to analyze document structure or extract patterns, (3) User needs to generate document outlines based on topics, (4) User wants to build RAG systems or document analysis tools using official文献 data, (5) User asks about 总书记讲话, 重要讲话, 党建内容, or similar official documents.
 ---
 
-# Official Document Intelligence Dataset
+# Official Document Intelligence Dataset - Agent Skill
 
-面向公开文献的智能数据集与结构化分析服务，为 AI / Agent 提供文档检索、结构分析、模式匹配和内容生成辅助能力。
+## 何时调用 Skill 此
 
-## 核心能力
+触发条件（满足任一即可）：
+- 用户请求搜索、检索或分析官方文献（习近平讲话、重要指示、党建内容）
+- 用户要求基于主题生成文档大纲或结构推荐
+- 用户询问项目如何使用 CLI/API 进行文档操作
+- 用户提到 "讲话"、"指示"、"会议"、"出访"、"考察" 等文档类型
+- 用户需要构建 RAG 系统或文档知识库
 
-- 公开文献采集与标准化
-- 文档元数据与主题分析
-- 文档结构识别与模式提取
-- 文献检索与相关内容推荐
-- 基于主题生成结构化文档大纲
-- 为 AI / Agent 提供可调用的数据与结构能力
+## 如何调用 Skill 此
 
-## 快速开始
-
-### 环境要求
-
-- Python 3.9+
-- 依赖包见 requirements.txt
-
-### 安装
+### 1. 数据更新
 
 ```bash
+# 查看当前工作目录
+pwd
+
+# 进入项目目录
 cd official-document-dataset
-pip install -r requirements.txt
-```
 
-## 数据更新
-
-项目提供便捷的数据更新脚本：
-
-```bash
 # 增量更新（推荐日常使用）
-python update.py                    # 增量更新近7天数据
-python update.py --days 30          # 增量更新近30天数据
+python update.py                    # 近7天
+python update.py --days 30          # 近30天
 
 # 全量抓取
 python update.py --full
-python update.py --full --details   # 获取文章正文
+python update.py --full --details   # 含文章正文
 ```
 
-## 检索服务
-
-### CLI 检索
+### 2. CLI 检索
 
 ```bash
-# 关键词搜索
 python main.py search --keywords "人工智能"
-
-# 按分类搜索
 python main.py search --category "国内"
-
-# 推荐结构
 python main.py recommend --title "关于推进XX工作的重要指示"
-
-# 生成大纲
 python main.py outline --topic "人工智能产业高质量发展" --doc-type "讲话"
 ```
 
-### API 服务
+### 3. API 服务
 
 ```bash
-# 启动API服务
 python main.py serve --port 8000
+# 然后在同一会话中通过 HTTP 调用各端点
 ```
 
-API端点：
-- `GET /` - 服务信息
-- `POST /api/search` - 结构化检索
-- `GET /api/documents/{doc_id}` - 获取文档详情
-- `GET /api/documents/{doc_id}/related` - 获取相关文档
-- `POST /api/recommend/structure` - 推荐文档结构
-- `GET /api/statistics` - 统计数据
-- `POST /api/generate/outline` - 生成文档大纲
+## 输入 / 输出规范
 
-## 数据规模
+### 输入
+- 用户自然语言请求（中文为主）
+- 可选参数：关键词、分类、文档类型、日期范围、主题
 
-### 数据来源
+### 输出
+- **搜索**：JSON 格式的文档列表，包含标题、日期、摘要、来源
+- **推荐**：文档结构模式 + 推荐大纲
+- **大纲生成**：完整的分层大纲 JSON + 相关文档 + 引用证据
+- **统计**：文档数量、分类分布、领域分布
 
-| 来源 | 文档数 | 说明 |
-|------|--------|------|
-| jhsjk.people.cn | ~1,200篇 | 习近平系列重要讲话数据库 |
-| 12371.cn | ~1,800篇 | 共产党员网重要讲话 |
-| qstheory.cn | ~10篇 | 求是网党建内容 |
-| **合计** | **~3,000篇** | 覆盖2021-2026年 |
-
-### 文档类型分布
-
-- 讲话: ~1,400篇
-- 会议: ~280篇
-- 出访: ~200篇
-- 考察: ~150篇
-- 其他类型...
-
-## 工作流程
+## Agent 工作流程
 
 ```
-公开文献
+用户请求
    ↓
-采集与标准化
+判断意图（搜索/分析/生成）
    ↓
-元数据 / 主题 / 结构分析
+执行对应命令（CLI 或 API）
    ↓
-结构模式与知识组织
+解析结果 JSON
    ↓
-检索与推荐
+格式化为自然语言回复
    ↓
-AI / Agent
-   ↓
-文档大纲 / 正文输出
+附加引用链接和证据
 ```
 
-## 典型应用
+### 典型场景示例
 
-1. **AI 文档生成** - 基于主题生成结构化文档大纲
-2. **Agent / MCP 知识能力** - 提供文献检索和结构分析能力
-3. **RAG 数据源** - 作为检索增强生成的知识库
-4. **公文结构分析** - 分析官方文献的组织方式
-5. **文献检索与知识组织** - 多条件组合检索
+**场景 A：用户问"帮我搜索关于人工智能的讲话"**
+1. 调用 `python main.py search --keywords "人工智能"`
+2. 解析返回的文档列表
+3. 格式化输出：标题、日期、来源、摘要
+4. 提示用户是否需要生成大纲或查看详情
 
-## 项目定位
-
-本项目不是单纯的文献爬虫，也不是固定模板生成器，而是为 AI 文档生成提供：
-
-> **数据 + 检索 + 结构 + 证据**
-
-的基础能力。
-
-结构模式来自公开文献样本分析，用于辅助 AI 进行文档组织和生成，不代表任何官方写作标准。
-
-## 使用示例
-
-### 示例1: 检索相关文档
-
-```python
-from scripts.service.search import DocumentSearchService
-from pathlib import Path
-
-service = DocumentSearchService(Path('data/indexes/document_index.db'))
-result = service.search(keywords='人工智能', limit=10)
-print(f"找到 {result['result']['total']} 条结果")
-```
-
-### 示例2: 生成文档大纲
-
-```python
-from scripts.service.document_builder import DocumentOutlineBuilder
-
-builder = DocumentOutlineBuilder(Path('knowledge/patterns'))
-outline = builder.build_document_outline(
-    topic='人工智能产业高质量发展',
-    doc_type='讲话'
-)
-print(json.dumps(outline, ensure_ascii=False, indent=2))
-```
-
-### 示例3: 调用API
-
-```bash
-# 搜索文档
-curl -X POST http://localhost:8000/api/search \
-  -H "Content-Type: application/json" \
-  -d '{"keywords": "人工智能", "limit": 10}'
-
-# 生成大纲
-curl -X POST http://localhost:8000/api/generate/outline \
-  -H "Content-Type: application/json" \
-  -d '{"topic": "人工智能产业高质量发展", "doc_type": "讲话"}'
-```
-
-## 技术架构
-
-### 四层架构
-
-1. **原始文档层 (Raw Layer)** - 保持原文档原貌
-2. **标准元数据层 (Metadata Layer)** - 统一的Schema定义
-3. **结构分析层 (Structure Layer)** - 文档结构解析
-4. **知识服务层 (Service Layer)** - 检索API和结构推荐
-
-### 目录结构
-
-```
-official-document-dataset/
-├── scripts/
-│   ├── crawler/          # 爬虫脚本
-│   ├── parser/           # 解析脚本
-│   ├── analyzer/         # 分析脚本
-│   ├── dataset/          # 数据集构建
-│   └── service/          # 服务脚本
-├── data/
-│   ├── raw/              # 原始数据
-│   ├── structured/       # 结构化数据
-│   └── indexes/          # 索引数据
-├── knowledge/
-│   └── patterns/         # 结构模式库
-├── schemas/              # Schema定义
-└── api/                  # API服务
-```
+**场景 B：用户要求"生成一份关于 XX 的大纲"**
+1. 调用 `python main.py outline --topic "XX" --doc-type "讲话"`
+2. 解析返回的结构模式
+3. 输出：文档类型 + 推荐结构 + 大纲章节 + 参考证据
+4. 提示用户可以下载或保存为文件
 
 ## 注意事项
 
-1. **版权说明**: 数据来源为公开网站，仅供内部研究使用
-2. **数据更新**: 建议定期运行增量更新保持数据最新
-3. **性能优化**: 大数据量时建议使用SQLite FTS5或Elasticsearch
+1. **数据时效性**：运行前检查是否有新文档，建议先执行 `python update.py`
+2. **网络依赖**：爬虫脚本需要访问 `jhsjk.people.cn` 等外部网站
+3. **性能**：全量抓取可能耗时较长，建议增量更新日常使用
+4. **版权**：数据仅供研究使用，不得商用
+5. **配置文件**：`config/sources.yaml` 可自定义数据源参数
+6. **运行时数据**：`data/` 目录下的 .db、.jsonl 文件是生成的，不提交 Git
 
-## 后续扩展
+## 技术架构速览
 
-- Phase 1: SQLite + 关键词索引 (已完成)
-- Phase 2: SQLite FTS5 全文检索
-- Phase 3: Embedding 向量化
-- Phase 4: Hybrid 混合检索
+- **四层架构**：原始文档 → 元数据 → 结构分析 → 知识服务
+- **数据结构**：Schema 定义在 `schemas/document.json`
+- **模式库**：`knowledge/patterns/*.json` 存储结构模式
+- **检索引擎**：SQLite FTS5 全文索引

@@ -177,12 +177,13 @@ class FullDataCrawler(BaseCrawler):
         logger.info(f"Saved {len(articles)} articles to {output_path}")
         return output_path
     
-    def run_full_crawl(self, max_pages: int = 50, save_details: bool = True):
+    def run_full_crawl(self, max_pages: int = 50, save_details: bool = True, batch_size: int = 5):
         """执行全量抓取"""
         logger.info("="*60)
         logger.info("开始全量数据抓取")
         logger.info(f"最大页数: {max_pages}")
         logger.info(f"已有文档数: {len(self.existing_ids)}")
+        logger.info(f"批量大小: {batch_size}")
         logger.info("="*60)
         
         # Step 1: 抓取索引
@@ -201,7 +202,7 @@ class FullDataCrawler(BaseCrawler):
         # Step 2: 抓取详情（可选）
         if save_details and all_articles:
             logger.info("\n[Step 2/2] 抓取文章详情...")
-            detailed_articles = self.fetch_all_details(all_articles)
+            detailed_articles = self.fetch_all_details(all_articles, batch_size)
             
             # 保存详细数据
             detail_output = self.index_dir / 'full_articles_detailed.json'
@@ -234,7 +235,7 @@ def main():
     data_dir.mkdir(parents=True, exist_ok=True)
     
     crawler = FullDataCrawler(config, data_dir)
-    articles = crawler.run_full_crawl(args.max_pages, args.save_details)
+    articles = crawler.run_full_crawl(args.max_pages, args.save_details, args.batch_size)
     
     logger.info(f"\n全量抓取完成！共获取 {len(articles)} 篇新文章")
 
