@@ -122,20 +122,16 @@ class DatasetBuilder:
         """生成文档ID，始终满足 Schema pattern: ^people_\\d{8}_\\d+$"""
         doc_id = doc.get('doc_id', '')
         date = doc.get('publish_date', '')
-
-        # 日期：优先用发布日，缺失时由内容哈希确定性推导（避免空日期导致格式不符）
-        date_str = date.replace('-', '') if date else ''
         digest = hashlib.md5(json.dumps(doc, ensure_ascii=False).encode()).hexdigest()
 
-        if not date_str:
-            # 用哈希前8位作为确定性日期占位（YYYYMMDD）
-            date_str = digest[:8]
+        # 日期：优先用发布日，缺失/非法时由内容哈希确定性推导（保证恰好 8 位数字）
+        date_str = ''.join(c for c in date if c.isdigit())
+        if len(date_str) != 8:
+            date_str = f"{int(digest[:8], 16) % 100000000:08d}"
 
-        if not doc_id:
-            # 用哈希数字子串作为数值ID，保证仅含 \d
-            doc_id = ''.join(c for c in digest if c.isdigit())
-            if len(doc_id) < 1:
-                doc_id = str(int(digest, 16))
+        # ID：必须为纯数字串；缺失或含非数字字符时由哈希确定性推导
+        if not doc_id or not doc_id.isdigit():
+            doc_id = str(int(digest, 16))
 
         return f"people_{date_str}_{doc_id}"
     
