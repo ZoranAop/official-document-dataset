@@ -1,10 +1,24 @@
+# Data directories (generated output)
 data/raw/
 data/structured/
 data/indexes/
-scripts/**/__pycache__/
+scripts/dataset/data/
+scripts/crawler/data/
+
+# Compiled Python
+**/__pycache__/
 *.pyc
 *.pyo
+*.pyd
+
+# Database and search index
 *.db
-*.jsonl
 *.sqlite
 *.sqlite3
+
+# JSONL dataset (large files)
+*.jsonl
+
+# OS and editor
+.DS_Store
+Thumbs.db

@@ -5,6 +5,7 @@
 """
 
 import json
+import hashlib
 import logging
 from pathlib import Path
 from typing import List, Dict, Any
@@ -84,7 +85,6 @@ class DatasetValidator:
         
         # 验证内容哈希
         if doc.get('content'):
-            import hashlib
             computed_hash = hashlib.sha256(doc['content'].encode('utf-8')).hexdigest()
             if doc.get('content_hash') != computed_hash:
                 result['errors'].append("Content hash mismatch")

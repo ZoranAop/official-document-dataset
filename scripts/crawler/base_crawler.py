@@ -6,6 +6,7 @@
 
 import hashlib
 import json
+import re
 import time
 import logging
 from datetime import datetime
@@ -204,9 +205,8 @@ class BaseCrawler:
                     href = base_url + href
                 elif not href.startswith('http'):
                     href = base_url + '/' + href
-                
+
                 # 提取doc_id
-                import re
                 match = re.search(r'/article/(\d+)', href)
                 if match:
                     doc_id = match.group(1)
@@ -245,7 +245,6 @@ class BaseCrawler:
                 if date_tag:
                     date = date_tag.strip()
                     # 清理日期格式
-                    import re
                     match = re.search(r'(\d{4}-\d{2}-\d{2})', date)
                     if match:
                         date = match.group(1)
@@ -268,7 +267,6 @@ class BaseCrawler:
                     full_url = href
                 
                 # 提取doc_id
-                import re
                 doc_id_match = re.search(r'/article/(\d+)', full_url)
                 doc_id = doc_id_match.group(1) if doc_id_match else ''
                 
@@ -311,7 +309,6 @@ class BaseCrawler:
         
         page_text = soup.get_text()
         for pattern in date_patterns:
-            import re
             match = re.search(pattern, page_text)
             if match:
                 date_str = match.group(1)

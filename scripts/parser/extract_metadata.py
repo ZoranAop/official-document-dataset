@@ -6,15 +6,10 @@
 import re
 import json
 import logging
-import sys
-import os
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 
-# 添加父目录到Python路径
-sys.path.insert(0, os.path.dirname(__file__))
-
-from normalize_text import TextNormalizer
+from scripts.parser.normalize_text import TextNormalizer
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -6,6 +6,7 @@
 
 import json
 import logging
+import re
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Any
@@ -124,7 +125,6 @@ class IndexBuilder:
         content = doc.get('content', '')
         
         # 简单分词索引
-        import re
         words = re.findall(r'[\u4e00-\u9fff]{2,4}', content)
         
         for i, word in enumerate(words):

@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Any
-from search import StructureRecommendationService
+from scripts.service.search import StructureRecommendationService
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
