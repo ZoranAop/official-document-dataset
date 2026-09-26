@@ -119,14 +119,25 @@ class DatasetBuilder:
         return processed_documents
     
     def _generate_id(self, doc: Dict) -> str:
-        """生成文档ID"""
+        """生成文档ID，始终满足 Schema pattern: ^people_\\d{8}_\\d+$"""
         doc_id = doc.get('doc_id', '')
         date = doc.get('publish_date', '')
-        
-        if date and doc_id:
-            return f"people_{date.replace('-', '')}_{doc_id}"
-        else:
-            return hashlib.md5(json.dumps(doc, ensure_ascii=False).encode()).hexdigest()[:16]
+
+        # 日期：优先用发布日，缺失时由内容哈希确定性推导（避免空日期导致格式不符）
+        date_str = date.replace('-', '') if date else ''
+        digest = hashlib.md5(json.dumps(doc, ensure_ascii=False).encode()).hexdigest()
+
+        if not date_str:
+            # 用哈希前8位作为确定性日期占位（YYYYMMDD）
+            date_str = digest[:8]
+
+        if not doc_id:
+            # 用哈希数字子串作为数值ID，保证仅含 \d
+            doc_id = ''.join(c for c in digest if c.isdigit())
+            if len(doc_id) < 1:
+                doc_id = str(int(digest, 16))
+
+        return f"people_{date_str}_{doc_id}"
     
     def save_dataset(self, documents: List[Dict], filename: str = 'documents.jsonl'):
         """保存数据集为JSONL格式"""

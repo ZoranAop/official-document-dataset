@@ -16,6 +16,54 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def create_schema(conn: sqlite3.Connection) -> None:
+    """创建数据库表结构（可独立初始化或随构建执行）"""
+    cursor = conn.cursor()
+
+    # 创建文档表
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS documents (
+            id TEXT PRIMARY KEY,
+            title TEXT,
+            date TEXT,
+            source TEXT,
+            source_url TEXT,
+            category TEXT,
+            document_type TEXT,
+            document_subtype TEXT,
+            domains TEXT,
+            subjects TEXT,
+            keywords TEXT,
+            content_hash TEXT,
+            content_length INTEGER,
+            created_at TEXT
+        )
+    ''')
+
+    # 创建全文索引表
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS fulltext_index (
+            doc_id TEXT,
+            word TEXT,
+            position INTEGER,
+            PRIMARY KEY (doc_id, word, position)
+        )
+    ''')
+
+    # 创建主题索引表
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS theme_index (
+            doc_id TEXT,
+            theme_name TEXT,
+            theme_role TEXT,
+            confidence REAL,
+            PRIMARY KEY (doc_id, theme_name)
+        )
+    ''')
+
+    conn.commit()
+
+
 class IndexBuilder:
     """索引构建器"""
     
@@ -33,45 +81,7 @@ class IndexBuilder:
         cursor = conn.cursor()
         
         # 创建表
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS documents (
-                id TEXT PRIMARY KEY,
-                title TEXT,
-                date TEXT,
-                source TEXT,
-                source_url TEXT,
-                category TEXT,
-                document_type TEXT,
-                document_subtype TEXT,
-                domains TEXT,
-                subjects TEXT,
-                keywords TEXT,
-                content_hash TEXT,
-                content_length INTEGER,
-                created_at TEXT
-            )
-        ''')
-        
-        # 创建全文索引表
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS fulltext_index (
-                doc_id TEXT,
-                word TEXT,
-                position INTEGER,
-                PRIMARY KEY (doc_id, word, position)
-            )
-        ''')
-        
-        # 创建主题索引表
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS theme_index (
-                doc_id TEXT,
-                theme_name TEXT,
-                theme_role TEXT,
-                confidence REAL,
-                PRIMARY KEY (doc_id, theme_name)
-            )
-        ''')
+        create_schema(conn)
         
         # 插入数据
         for doc in documents:

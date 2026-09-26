@@ -128,6 +128,9 @@ def main():
         
     elif args.command == 'serve':
         logger.info(f"启动API服务，端口: {args.port}")
+        # 初始化索引数据库（若不存在）
+        from scripts.init_db import init_db
+        init_db(Path('data'))
         import uvicorn
         from api.server import app
         uvicorn.run(app, host=args.host, port=args.port)
